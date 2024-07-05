@@ -136,6 +136,12 @@
     <!-- Apex Chart -->
     <script src="<?= base_url('Assets/') ?>vendor/apexchart/apexchart.js"></script>
 
+    <!-- Datatable -->
+    <script src="<?= base_url('Assets/') ?>vendor/datatables/js/jquery.dataTables.min.js"></script>
+    <!-- <script src="<?= base_url('Assets/') ?>js/plugins-init/datatables.init.js"></script> -->
+
+    <?= $this->renderSection('datatables'); ?>
+
     <script src="<?= base_url('Assets/') ?>vendor/chart.js/Chart.bundle.min.js"></script>
 
     <!-- Chart piety plugin files -->

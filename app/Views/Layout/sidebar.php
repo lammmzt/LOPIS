@@ -14,8 +14,8 @@
                     <li><a href="<?= base_url('Kota') ?>">Kota</a></li>
                     <li><a href="<?= base_url('Kecamatan') ?>">Kecamatan</a></li>
                     <li><a href="<?= base_url('Kelurahan') ?>">Kelurahan</a></li>
-                    <li><a href="<?= base_url('Rw') ?>">Rw</a></li>
-                    <li><a href="<?= base_url('Rt') ?>">Rt</a></li>
+                    <li><a href="<?= base_url('RW') ?>">RW</a></li>
+                    <li><a href="<?= base_url('RW') ?>">RT</a></li>
                 </ul>
 
             </li>
