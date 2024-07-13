@@ -4,7 +4,7 @@
 <div class="col-12">
     <div class="card">
         <div class="card-header">
-            <h4 class="card-title text-start">Data Kota/Kab</h4>
+            <h4 class="card-title text-start">Data User</h4>
             <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#tambahDadta"><i
                     class="fas fa-plus"></i>
             </button>
@@ -36,29 +36,43 @@
                     <thead>
                         <tr>
                             <th style="width: 20px;">No</th>
-                            <th>Name Kota/Kab</th>
+                            <th>Name User</th>
+                            <th>Role</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php 
                         $no = 1;
-                        foreach ($kota as $data):
+                        foreach ($users as $data):
                         ?>
                         <tr>
                             <td>
                                 <?= $no++; ?>
                             </td>
                             <td>
-                                <?= $data['nama_kota']; ?>
+                                <?= $data['username']; ?>
+                            </td>
+                            <td>
+                                <?php 
+                                if ($data['role'] == '1'){
+                                    echo 'Admin';
+                                }else if ($data['role'] == '2'){
+                                    echo 'Admin PKM';
+                                }else if ($data['role'] == '3'){
+                                    echo 'Admin Kelurahan';
+                                }else {
+                                    echo 'Supervisor';
+                                }
+                                ?>
                             </td>
                             <td>
                                 <div class="d-flex">
                                     <a href="#" class="btn btn-primary shadow btn-xs sharp me-1" data-bs-toggle="modal"
-                                        data-bs-target="#edit<?= $data['id_kota']; ?>"><i
+                                        data-bs-target="#edit<?= $data['id_user']; ?>"><i
                                             class="fas fa-pencil-alt"></i></a>
                                     <a href="#" class="btn btn-danger shadow btn-xs sharp" data-bs-toggle="modal"
-                                        data-bs-target="#hapus<?= $data['id_kota']; ?>"><i class="fa fa-trash"></i></a>
+                                        data-bs-target="#hapus<?= $data['id_user']; ?>"><i class="fa fa-trash"></i></a>
                                 </div>
                             </td>
                         </tr>
@@ -76,18 +90,35 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tambah Kota/Kab</h5>
+                <h5 class="modal-title">Tambah User</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
                 </button>
             </div>
-            <form action="<?= base_url('Kota/Save') ?>" method="post">
+            <form action="<?= base_url('Users/Save') ?>" method="post">
                 <div class="modal-body">
                     <div class="basic-form">
                         <div class="mb-3 row">
-                            <label class="col-sm-3 col-form-label">Nama Kota/Kab</label>
+                            <label class="col-sm-3 col-form-label">username</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" placeholder="Masukan nama Kota/Kab" name="name"
-                                    id="name">
+                                <input type="text" class="form-control" placeholder="Masukan username" name="username"
+                                    id="username">
+                            </div>
+                            <label class="col-sm-3 col-form-label">Password</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" placeholder="Masukan password" name="password"
+                                    id="password">
+                            </div>
+                            <label class="col-sm-3 col-form-label">Role</label>
+                            <div class="col-sm-9">
+                                <select name="role" id="role" class="form-control">
+                                    <option value="">
+                                        pilih role
+                                    </option>
+                                    <option value="1">Admin</option>
+                                    <option value="2">Admin PKM</option>
+                                    <option value="3">Admin Kelurahan</option>
+                                    <option value="4">Supervisor</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -103,28 +134,42 @@
 </div>
 
 <?php 
-foreach ($kota as $data):
+foreach ($users as $data):
 ?>
 
 <!-- Modal edit-->
-<div class="modal fade" id="edit<?= $data['id_kota']; ?>" style="z-index: 9999;">
+<div class="modal fade" id="edit<?= $data['id_user']; ?>" style="z-index: 9999;">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Kota/Kab</h5>
+                <h5 class="modal-title">Edit User</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
                 </button>
             </div>
-            <form action="<?= base_url('Kota/Update') ?>" method="post">
+            <form action="<?= base_url('Users/Update') ?>" method="post">
                 <div class="modal-body">
                     <div class="basic-form">
                         <div class="mb-3 row">
-                            <input type="hidden" value="<?= $data['id_kota']; ?>" name="id_kota">
-                            <label class="col-sm-3 col-form-label">Kota/Kab</label>
+                            <input type="hidden" value="<?= $data['id_user']; ?>" name="id_user">
+                            <label class="col-sm-3 col-form-label">User</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" placeholder="Masukan nama Kota/Kab" name="name"
-                                    id="name" value="<?= $data['nama_kota']; ?>">
+                                <input type="text" class="form-control" placeholder="Masukan nama User" name="username"
+                                    id="username" value="<?= $data['username']; ?>">
                             </div>
+                            <label class="col-sm-3 col-form-label">Role</label>
+                            <div class="col-sm-9">
+                                <select name="role" id="role" class="form-control">
+                                    <option value="">
+                                        pilih role
+                                    </option>
+                                    <option value="1" <?= ($data['role'] == '1')?  'selected':''  ?>>Admin</option>
+                                    <option value="2" <?= ($data['role'] == '2')?  'selected':''  ?>>Admin PKM</option>
+                                    <option value="3" <?= ($data['role'] == '3')?  'selected':''  ?>>Admin Kelurahan
+                                    </option>
+                                    <option value="4" <?= ($data['role'] == '4')?  'selected':''  ?>>Supervisor</option>
+                                </select>
+                            </div>
+
                         </div>
                     </div>
 
@@ -140,7 +185,7 @@ foreach ($kota as $data):
 
 <!-- modal hapus -->
 <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true"
-    id="hapus<?= $data['id_kota']; ?>">
+    id="hapus<?= $data['id_user']; ?>">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
@@ -148,12 +193,12 @@ foreach ($kota as $data):
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
                 </button>
             </div>
-            <form action="<?= base_url('Kota/Delete') ?>" method="post">
+            <form action="<?= base_url('Users/Delete') ?>" method="post">
                 <div class="modal-body">
                     <p>
                         Apakah anda yakin menghapus data ini?
                     </p>
-                    <input type="hidden" name="id_kota" value="<?= $data['id_kota']; ?>">
+                    <input type="hidden" name="id_user" value="<?= $data['id_user']; ?>">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Tidak</button>

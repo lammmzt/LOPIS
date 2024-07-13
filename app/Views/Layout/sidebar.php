@@ -15,10 +15,15 @@
                     <li><a href="<?= base_url('Kecamatan') ?>">Kecamatan</a></li>
                     <li><a href="<?= base_url('Kelurahan') ?>">Kelurahan</a></li>
                     <li><a href="<?= base_url('RW') ?>">RW</a></li>
-                    <li><a href="<?= base_url('RW') ?>">RT</a></li>
+                    <li><a href="<?= base_url('RT') ?>">RT</a></li>
                 </ul>
-
             </li>
+            <li class=""><a href="<?= base_url('Users') ?>" class="" aria-expanded="false">
+                    <i class="bi bi-people"></i>
+                    <span class="nav-text">Users</span>
+                </a>
+            </li>
+
 
         </ul>
 

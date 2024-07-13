@@ -67,6 +67,12 @@ class Kota extends BaseController{
         session()->setFlashdata('success', 'Data berhasil diubah');
         return redirect()->to('/Kota');
     }
+
+    public function Delete(){
+        $this->kotaModel->delete($this->request->getPost('id_kota'));
+        session()->setFlashdata('success', 'Data berhasil dihapus');
+        return redirect()->to('/Kota');
+    }
 }
 
 

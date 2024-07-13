@@ -19,10 +19,12 @@
 
     <!-- FAVICONS ICON -->
     <link rel="shortcut icon" type="image/png" href="<?= base_url('Assets/') ?>images/favicon.png">
+
+    <link rel="stylesheet" href="<?= base_url('Assets/') ?>vendor/nouislider/nouislider.min.css">
+    <link rel="stylesheet" href="<?= base_url('Assets/') ?>vendor/select2/css/select2.min.css">
     <link href="<?= base_url('Assets/') ?>vendor/jquery-nice-select/css/nice-select.css" rel="stylesheet">
     <link href="<?= base_url('Assets/') ?>vendor/owl-carousel/owl.carousel.css" rel="stylesheet">
-    <link rel="stylesheet" href="<?= base_url('Assets/') ?>vendor/nouislider/nouislider.min.css">
-
+    <link href="<?= base_url('Assets/') ?>vendor/jquery-nice-select/css/nice-select.css" rel="stylesheet">
     <!-- Datatable -->
     <link href="<?= base_url('Assets/') ?>vendor/datatables/css/jquery.dataTables.min.css" rel="stylesheet">
 

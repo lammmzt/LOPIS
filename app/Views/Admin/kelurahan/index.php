@@ -1,10 +1,11 @@
 <?= $this->extend('Template/index'); ?>
 <?= $this->section('content'); ?>
 
+
 <div class="col-12">
     <div class="card">
         <div class="card-header">
-            <h4 class="card-title text-start">Data Kota/Kab</h4>
+            <h4 class="card-title text-start">Data kelurahan</h4>
             <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#tambahDadta"><i
                     class="fas fa-plus"></i>
             </button>
@@ -36,29 +37,35 @@
                     <thead>
                         <tr>
                             <th style="width: 20px;">No</th>
-                            <th>Name Kota/Kab</th>
+                            <th>Name kelurahan</th>
+                            <th>Name Kecamatan</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php 
                         $no = 1;
-                        foreach ($kota as $data):
+                        foreach ($kelurahan as $data):
                         ?>
                         <tr>
                             <td>
                                 <?= $no++; ?>
                             </td>
                             <td>
-                                <?= $data['nama_kota']; ?>
+                                <?= $data['nama_kelurahan']; ?>
                             </td>
+                            <td>
+                                <?= $data['nama_kecamatan']; ?>
+                            </td>
+
                             <td>
                                 <div class="d-flex">
                                     <a href="#" class="btn btn-primary shadow btn-xs sharp me-1" data-bs-toggle="modal"
-                                        data-bs-target="#edit<?= $data['id_kota']; ?>"><i
+                                        data-bs-target="#edit<?= $data['id_kelurahan']; ?>"><i
                                             class="fas fa-pencil-alt"></i></a>
                                     <a href="#" class="btn btn-danger shadow btn-xs sharp" data-bs-toggle="modal"
-                                        data-bs-target="#hapus<?= $data['id_kota']; ?>"><i class="fa fa-trash"></i></a>
+                                        data-bs-target="#hapus<?= $data['id_kelurahan']; ?>"><i
+                                            class="fa fa-trash"></i></a>
                                 </div>
                             </td>
                         </tr>
@@ -76,17 +83,32 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tambah Kota/Kab</h5>
+                <h5 class="modal-title">Tambah kelurahan</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
                 </button>
             </div>
-            <form action="<?= base_url('Kota/Save') ?>" method="post">
+            <form action="<?= base_url('kelurahan/Save') ?>" method="post">
                 <div class="modal-body">
                     <div class="basic-form">
                         <div class="mb-3 row">
-                            <label class="col-sm-3 col-form-label">Nama Kota/Kab</label>
+                            <label class="col-sm-3 col-form-label">Nama Kecamatan</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" placeholder="Masukan nama Kota/Kab" name="name"
+                                <select id="single-select" name="kecamatan_id">
+                                    <option value="">--pilih kecamatan--</option>
+                                    <?php 
+                                    foreach($kecamatan as $dk):
+                                ?>
+                                    <option value="<?= $dk['id_kecamatan']; ?>"><?= $dk['nama_kecamatan']; ?></option>
+                                    <?php 
+                                endforeach;
+                                ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-sm-3 col-form-label">Nama kelurahan</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" placeholder="Masukan nama kelurahan" name="name"
                                     id="name">
                             </div>
                         </div>
@@ -103,27 +125,27 @@
 </div>
 
 <?php 
-foreach ($kota as $data):
+foreach ($kelurahan as $data):
 ?>
 
 <!-- Modal edit-->
-<div class="modal fade" id="edit<?= $data['id_kota']; ?>" style="z-index: 9999;">
+<div class="modal fade" id="edit<?= $data['id_kelurahan']; ?>" style="z-index: 9999;">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Kota/Kab</h5>
+                <h5 class="modal-title">Edit kelurahan</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
                 </button>
             </div>
-            <form action="<?= base_url('Kota/Update') ?>" method="post">
+            <form action="<?= base_url('kelurahan/Update') ?>" method="post">
                 <div class="modal-body">
                     <div class="basic-form">
                         <div class="mb-3 row">
-                            <input type="hidden" value="<?= $data['id_kota']; ?>" name="id_kota">
-                            <label class="col-sm-3 col-form-label">Kota/Kab</label>
+                            <input type="hidden" value="<?= $data['id_kelurahan']; ?>" name="id_kelurahan">
+                            <label class="col-sm-3 col-form-label">kelurahan</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" placeholder="Masukan nama Kota/Kab" name="name"
-                                    id="name" value="<?= $data['nama_kota']; ?>">
+                                <input type="text" class="form-control" placeholder="Masukan nama kelurahan" name="name"
+                                    id="name" value="<?= $data['nama_kelurahan']; ?>">
                             </div>
                         </div>
                     </div>
@@ -140,7 +162,7 @@ foreach ($kota as $data):
 
 <!-- modal hapus -->
 <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true"
-    id="hapus<?= $data['id_kota']; ?>">
+    id="hapus<?= $data['id_kelurahan']; ?>">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
@@ -148,12 +170,12 @@ foreach ($kota as $data):
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
                 </button>
             </div>
-            <form action="<?= base_url('Kota/Delete') ?>" method="post">
+            <form action="<?= base_url('kelurahan/Delete') ?>" method="post">
                 <div class="modal-body">
                     <p>
                         Apakah anda yakin menghapus data ini?
                     </p>
-                    <input type="hidden" name="id_kota" value="<?= $data['id_kota']; ?>">
+                    <input type="hidden" name="id_kelurahan" value="<?= $data['id_kelurahan']; ?>">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Tidak</button>
@@ -164,9 +186,15 @@ foreach ($kota as $data):
 </div>
 </div>
 <?php endforeach; ?>
+
+
+
 <?= $this->endSection('content'); ?>
 
 <?= $this->section('datatables'); ?>
+<script src="<?= base_url('Assets/') ?>vendor/jquery-nice-select/js/jquery.nice-select.min.js"></script>
+<script src="<?= base_url('Assets/') ?>vendor/select2/js/select2.full.min.js"></script>
+<script src="<?= base_url('Assets/') ?>js/plugins-init/select2-init.js"></script>
 <script>
 var table = $('#example3').DataTable({
     language: {
