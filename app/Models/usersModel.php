@@ -10,7 +10,7 @@ class usersModel extends Model
     protected $primaryKey = 'id_user';
     protected $allowedFields = ['id_user','username', 'password','role','created_at', 'updated_at'];
 
-    public function getKUsers($id = false){
+    public function getUsers($id = false){
         if($id == false){
             return $this
             ->findAll();

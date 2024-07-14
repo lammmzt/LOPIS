@@ -4,7 +4,7 @@
 <div class="col-12">
     <div class="card">
         <div class="card-header">
-            <h4 class="card-title text-start">Data User</h4>
+            <h4 class="card-title text-start">Detail Data User</h4>
             <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#tambahDadta"><i
                     class="fas fa-plus"></i>
             </button>
@@ -36,7 +36,9 @@
                     <thead>
                         <tr>
                             <th style="width: 20px;">No</th>
-                            <th>Name User</th>
+                            <th>Username</th>
+                            <th>Nama user</th>
+                            <th>Kelurahan</th>
                             <th>Role</th>
                             <th>Action</th>
                         </tr>
@@ -44,7 +46,7 @@
                     <tbody>
                         <?php 
                         $no = 1;
-                        foreach ($users as $data):
+                        foreach ($detail_user as $data):
                         ?>
                         <tr>
                             <td>
@@ -52,6 +54,12 @@
                             </td>
                             <td>
                                 <?= $data['username']; ?>
+                            </td>
+                            <td>
+                                <?= $data['nama_user']; ?>
+                            </td>
+                            <td>
+                                <?= $data['nama_kelurahan']; ?>
                             </td>
                             <td>
                                 <?php 
@@ -66,13 +74,15 @@
                                 }
                                 ?>
                             </td>
+
                             <td>
                                 <div class="d-flex">
                                     <a href="#" class="btn btn-primary shadow btn-xs sharp me-1" data-bs-toggle="modal"
-                                        data-bs-target="#edit<?= $data['id_user']; ?>"><i
+                                        data-bs-target="#edit<?= $data['id_detail_user']; ?>"><i
                                             class="fas fa-pencil-alt"></i></a>
                                     <a href="#" class="btn btn-danger shadow btn-xs sharp" data-bs-toggle="modal"
-                                        data-bs-target="#hapus<?= $data['id_user']; ?>"><i class="fa fa-trash"></i></a>
+                                        data-bs-target="#hapus<?= $data['id_detail_user']; ?>"><i
+                                            class="fa fa-trash"></i></a>
                                 </div>
                             </td>
                         </tr>
@@ -94,43 +104,71 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
                 </button>
             </div>
-            <form action="<?= base_url('Users/Save') ?>" method="post">
+            <form action="<?= base_url('Users/save_detail_user') ?>" method="post">
                 <div class="modal-body">
                     <div class="basic-form">
                         <div class="mb-3 row">
-                            <label class="col-sm-3 col-form-label">username</label>
+                            <label class="col-sm-3 col-form-label">Username</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" placeholder="Masukan username" name="username"
-                                    id="username">
-                            </div>
-                        </div>
-                        <div class="mb-3 row">
-                            <label class="col-sm-3 col-form-label">Password</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" placeholder="Masukan password" name="password"
-                                    id="password">
-                            </div>
-                        </div>
-                        <div class="mb-3 row">
-                            <label class="col-sm-3 col-form-label">Role</label>
-                            <div class="col-sm-9">
-                                <select name="role" id="role" class="form-control">
+                                <select name="user_id" class="" id="single-select" required>
                                     <option value="">
-                                        pilih role
+                                        pilih username
                                     </option>
-                                    <option value="1">Admin</option>
-                                    <option value="2">Admin PKM</option>
-                                    <option value="3">Admin Kelurahan</option>
-                                    <option value="4">Supervisor</option>
+                                    <?php 
+                                    foreach($users as $usr):
+                                    ?>
+                                    <option value="<?= $usr['id_user']; ?>"><?= $usr['username']; ?></option>
+                                    <?php 
+                                    endforeach;
+                                    ?>
                                 </select>
                             </div>
                         </div>
+                        <div class="mb-3 row">
+                            <label class="col-sm-3 col-form-label">nama user</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" placeholder="Masukan nama user" name="nama_user"
+                                    id="nama_user">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-sm-3 col-form-label">Jenis Kelamin</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" placeholder="Masukan jenis kelamin"
+                                    name="jenis_kelamin" id="jenis_kelamin">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-sm-3 col-form-label">Kelurahan</label>
+                            <div class="col-sm-9">
+                                <select name="kelurahan_id" class="" id="single-select2" required>
+                                    <option value="">
+                                        pilih kelurahan
+                                    </option>
+                                    <?php 
+                                    foreach($kelurahan as $klrn):
+                                    ?>
+                                    <option value="<?= $klrn['id_kelurahan']; ?>"><?= $klrn['nama_kelurahan']; ?>
+                                    </option>
+                                    <?php 
+                                    endforeach;
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-sm-3 col-form-label">Alamat User </label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" placeholder="Masukan alamat user"
+                                    name="alamat_user" id="alamat_user">
+                            </div>
+                        </div>
+
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
             </form>
         </div>
     </div>
@@ -217,6 +255,9 @@ foreach ($users as $data):
 <?= $this->endSection('content'); ?>
 
 <?= $this->section('datatables'); ?>
+<script src="<?= base_url('Assets/') ?>vendor/jquery-nice-select/js/jquery.nice-select.min.js"></script>
+<script src="<?= base_url('Assets/') ?>vendor/select2/js/select2.full.min.js"></script>
+<script src="<?= base_url('Assets/') ?>js/plugins-init/select2-init.js"></script>
 <script>
 var table = $('#example3').DataTable({
     language: {

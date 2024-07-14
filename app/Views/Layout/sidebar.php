@@ -18,12 +18,17 @@
                     <li><a href="<?= base_url('RT') ?>">RT</a></li>
                 </ul>
             </li>
-            <li class=""><a href="<?= base_url('Users') ?>" class="" aria-expanded="false">
-                    <i class="bi bi-people"></i>
-                    <span class="nav-text">Users</span>
-                </a>
-            </li>
 
+            <li><a class="has-arrow " href="javascript:void()" aria-expanded="false">
+                    <i class="bi bi-people"></i>
+                    <span class="nav-text">Master User</span>
+                </a>
+                <ul aria-expanded="false">
+                    <li><a href="<?= base_url('Users') ?>">User</a></li>
+                    <li><a href="<?= base_url('Users/detail') ?>">Detail user</a></li>
+
+                </ul>
+            </li>
 
         </ul>
 
