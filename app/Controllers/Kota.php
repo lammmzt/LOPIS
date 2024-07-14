@@ -2,7 +2,7 @@
 namespace App\Controllers;
 
 use App\Models\kotaModel;
-
+use CodeIgniter\HTTP\ResponseInterface;
 
 class Kota extends BaseController{
 
@@ -23,6 +23,16 @@ class Kota extends BaseController{
         ];
         
         return view('Admin/Kota/index', $data);
+    }
+
+    public function fetch_all(){
+        $data_kota = $this->kotaModel->findAll();
+
+        return $this->response->setJSON([
+            'error' => false,
+            'data' => $data_kota,
+            'status' => '200'
+        ]);
     }
 
     public function Save(){

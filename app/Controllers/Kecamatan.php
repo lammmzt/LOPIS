@@ -30,6 +30,27 @@ class Kecamatan extends BaseController{
         return view('Admin/kecamatan/index', $data);
     }
 
+    public function fetch_all(){
+        $data_kecamatan = $this->kecamatanModel->findAll();
+
+        return $this->response->setJSON([
+            'error' => false,
+            'data' => $data_kecamatan,
+            'status' => '200'
+        ]);
+    }
+
+    public function fetch_by_kota(){
+        $kota_id = $this->request->getPost('kota_id');
+        $data_kecamatan = $this->kecamatanModel->where('kota_id', $kota_id)->findAll();
+
+        return $this->response->setJSON([
+            'error' => false,
+            'data' => $data_kecamatan,
+            'status' => '200'
+        ]);
+    }
+
     public function Save(){
         $nama_kecamatan = $this->request->getPost('name');
         $kota_id = $this->request->getPost('kota_id');

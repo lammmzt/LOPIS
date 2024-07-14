@@ -3,6 +3,7 @@ namespace App\Controllers;
 
 use App\Models\kelurahanModel;
 use App\Models\kecamatanModel;
+use App\Models\kotaModel;
 use CodeIgniter\HTTP\ResponseInterface;
 
 
@@ -19,12 +20,14 @@ class Kelurahan extends BaseController{
     }
 
     public function index(){
+        $kotaModel = new kotaModel();
         $data = [
             'title' => 'kelurahan - LOPIS',
             'menu' => 'kelurahan',
             'sub_menu' => 'Dashboard',
             'kelurahan' => $this->kelurahanModel->getKelurahan(),
             'kecamatan' => $this->kecamatanModel->findAll(),
+            'kota' => $kotaModel->findAll(),
             'validation' => \Config\Services::validation(),
         ];
         // dd($data);

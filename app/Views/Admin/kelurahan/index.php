@@ -90,18 +90,21 @@
             <form action="<?= base_url('kelurahan/Save') ?>" method="post">
                 <div class="modal-body">
                     <div class="basic-form">
+                        <!-- select kota -->
+                        <div class="mb-3 row">
+                            <label class="col-sm-3 col-form-label">Nama Kota</label>
+                            <div class="col-sm-9">
+                                <select id="kota" name="kota_id">
+                                    <option value="">--pilih kota--</option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="mb-3 row">
                             <label class="col-sm-3 col-form-label">Nama Kecamatan</label>
                             <div class="col-sm-9">
-                                <select id="single-select" name="kecamatan_id">
+                                <select id="kecamatan" name="kecamatan_id">
                                     <option value="">--pilih kecamatan--</option>
-                                    <?php 
-                                    foreach($kecamatan as $dk):
-                                ?>
-                                    <option value="<?= $dk['id_kecamatan']; ?>"><?= $dk['nama_kecamatan']; ?></option>
-                                    <?php 
-                                endforeach;
-                                ?>
+
                                 </select>
                             </div>
                         </div>
@@ -124,6 +127,7 @@
     </div>
 </div>
 
+<!-- Modal edit-->
 <?php 
 foreach ($kelurahan as $data):
 ?>
@@ -137,12 +141,48 @@ foreach ($kelurahan as $data):
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
                 </button>
             </div>
-            <form action="<?= base_url('kelurahan/Update') ?>" method="post">
+            <form action="<?= base_url('Kelurahan/Update') ?>" method="post">
                 <div class="modal-body">
                     <div class="basic-form">
+                        <!-- select kota -->
+                        <div class="mb-3 row">
+                            <label class="col-sm-3 col-form-label">Nama Kota</label>
+                            <div class="col-sm-9">
+                                <select id="edit_kota" name="kota_id" class="form-control">
+                                    <option value="">--pilih kota--</option>
+                                    <?php
+                                    foreach ($kota as $dk):
+                                    ?>
+                                    <option value="<?= $dk['id_kota']; ?>"
+                                        <?= $dk['id_kota'] == $data['kota_id'] ? 'selected' : ''; ?>>
+                                        <?= $dk['nama_kota']; ?></option>
+                                    <?php
+                                    endforeach;
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- select kec -->
+                        <div class="mb-3 row">
+                            <label class="col-sm-3 col-form-label">Nama Kecamatan</label>
+                            <div class="col-sm-9">
+                                <select id="edit_kecamatan" name="kecamatan_id" class="form-control">
+                                    <option value="">--pilih kecamatan--</option>
+                                    <?php
+                                    foreach ($kecamatan as $dk):
+                                    ?>
+                                    <option value="<?= $dk['id_kecamatan']; ?>"
+                                        <?= $dk['id_kecamatan'] == $data['kecamatan_id'] ? 'selected' : ''; ?>>
+                                        <?= $dk['nama_kecamatan']; ?></option>
+                                    <?php
+                                    endforeach;
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
                         <div class="mb-3 row">
                             <input type="hidden" value="<?= $data['id_kelurahan']; ?>" name="id_kelurahan">
-                            <label class="col-sm-3 col-form-label">kelurahan</label>
+                            <label class="col-sm-3 col-form-label">Nama kelurahan</label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" placeholder="Masukan nama kelurahan" name="name"
                                     id="name" value="<?= $data['nama_kelurahan']; ?>">
@@ -170,7 +210,7 @@ foreach ($kelurahan as $data):
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
                 </button>
             </div>
-            <form action="<?= base_url('kelurahan/Delete') ?>" method="post">
+            <form action="<?= base_url('Kelurahan/Delete') ?>" method="post">
                 <div class="modal-body">
                     <p>
                         Apakah anda yakin menghapus data ini?
@@ -188,7 +228,6 @@ foreach ($kelurahan as $data):
 <?php endforeach; ?>
 
 
-
 <?= $this->endSection('content'); ?>
 
 <?= $this->section('datatables'); ?>
@@ -196,6 +235,55 @@ foreach ($kelurahan as $data):
 <script src="<?= base_url('Assets/') ?>vendor/select2/js/select2.full.min.js"></script>
 <script src="<?= base_url('Assets/') ?>js/plugins-init/select2-init.js"></script>
 <script>
+$("#kota").select2();
+$("#kecamatan").select2();
+$("#edit_kota").select2();
+$("#edit_kecamatan").select2();
+
+function getKota() {
+    $.ajax({
+        url: "<?= base_url('Kota/fetch_all') ?>",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            var html = '';
+            for (var i = 0; i < data.data.length; i++) {
+                html += '<option value="' + data.data[i].id_kota + '">' + data.data[i].nama_kota +
+                    '</option>';
+            }
+            $('#kota').append(html);
+        }
+    });
+}
+
+getKota();
+
+// ketika memilih kota
+$('#kota').on('change', function() {
+    var kota_id = $(this).val();
+    $.ajax({
+        url: "<?= base_url('Kecamatan/fetch_by_kota') ?>",
+        type: "POST",
+        data: {
+            kota_id: kota_id
+        },
+        dataType: "json",
+        success: function(data) {
+            var html = '';
+            html += '<option value="">--pilih kecamatan--</option>';
+            for (var i = 0; i < data.data.length; i++) {
+                html += '<option value="' + data.data[i].id_kecamatan + '">' + data.data[i]
+                    .nama_kecamatan +
+                    '</option>';
+            }
+            $('#kecamatan').html(html);
+        }
+    });
+});
+
+// ketika memilih edit kel
+
+
 var table = $('#example3').DataTable({
     language: {
         paginate: {
