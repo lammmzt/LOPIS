@@ -16,7 +16,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close">
                 </button> <strong>Success!</strong> <?= session()->getFlashdata('success'); ?>
             </div>
-            <?php endif;?>
+            <?php endif; ?>
             <!-- <div class="alert alert-warning solid alert-end-icon alert-dismissible fade show">
                 <span><i class="mdi mdi-alert"></i></span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close">
@@ -28,9 +28,9 @@
                 <span><i class="mdi mdi-help"></i></span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close">
                 </button>
-                <strong>Error!</strong> <?= session()->getFlashdata('success'); ?>
+                <strong>Error!</strong> <?= session()->getFlashdata('error'); ?>
             </div>
-            <?php endif;?>
+            <?php endif; ?>
             <div class="table-responsive table table-striped">
                 <table id="example3" class="display" style="min-width: 845px">
                     <thead>
@@ -41,9 +41,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php 
+                        <?php
                         $no = 1;
-                        foreach ($kota as $data):
+                        foreach ($kota as $data) :
                         ?>
                         <tr>
                             <td>
@@ -87,7 +87,7 @@
                             <label class="col-sm-3 col-form-label">Nama Kota/Kab</label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" placeholder="Masukan nama Kota/Kab" name="name"
-                                    id="name">
+                                    id="name" required>
                             </div>
                         </div>
                     </div>
@@ -102,8 +102,8 @@
     </div>
 </div>
 
-<?php 
-foreach ($kota as $data):
+<?php
+foreach ($kota as $data) :
 ?>
 
 <!-- Modal edit-->
@@ -123,7 +123,7 @@ foreach ($kota as $data):
                             <label class="col-sm-3 col-form-label">Kota/Kab</label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" placeholder="Masukan nama Kota/Kab" name="name"
-                                    id="name" value="<?= $data['nama_kota']; ?>">
+                                    id="name" value="<?= $data['nama_kota']; ?>" required>
                             </div>
                         </div>
                     </div>
@@ -168,6 +168,14 @@ foreach ($kota as $data):
 
 <?= $this->section('datatables'); ?>
 <script>
+// alert timeout
+window.setTimeout(function() {
+    $(".alert").fadeTo(500, 0).slideUp(500, function() {
+        $(this).remove();
+    });
+}, 3000);
+
+// panggil datatable
 var table = $('#example3').DataTable({
     language: {
         paginate: {
@@ -175,6 +183,10 @@ var table = $('#example3').DataTable({
             previous: '<i class="fa fa-angle-double-left" aria-hidden="true"></i>',
         },
     },
+    "columnDefs": [{
+        "targets": [2, 0],
+        "orderable": false
+    }]
 });
 </script>
 <?= $this->endSection('datatables'); ?>

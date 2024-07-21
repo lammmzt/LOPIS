@@ -30,7 +30,7 @@ class Kecamatan extends BaseController
         ];
 
         // dd($data);
-        return view('Admin/kecamatan/index', $data);
+        return view('Admin/Kecamatan/index', $data);
     }
 
     public function fetch_all($id = false)
@@ -81,7 +81,7 @@ class Kecamatan extends BaseController
             ],
         ])) {
             session()->setFlashdata('error', 'Nama kecamatan sudah ada');
-            return redirect()->to('/kecamatan')->withInput();
+            return redirect()->to('/Kecamatan')->withInput();
         }
         $this->kecamatanModel->save([
             'nama_kecamatan' => $nama_kecamatan,
@@ -89,7 +89,7 @@ class Kecamatan extends BaseController
             'created_at' => date('Y-m-d'),
         ]);
         session()->setFlashdata('success', 'Data berhasil ditambahkan');
-        return redirect()->to('/kecamatan');
+        return redirect()->to('/Kecamatan');
     }
 
     public function Update()
@@ -105,7 +105,7 @@ class Kecamatan extends BaseController
             ],
         ])) {
             session()->setFlashdata('error', 'Nama kecamatan sudah ada');
-            return redirect()->to('/kecamatan')->withInput();
+            return redirect()->to('/Kecamatan')->withInput();
         }
         $this->kecamatanModel->save([
             'nama_kecamatan' => $nama_kecamatan,
@@ -114,13 +114,13 @@ class Kecamatan extends BaseController
             'updated_at' => date('Y-m-d'),
         ]);
         session()->setFlashdata('success', 'Data berhasil diubah');
-        return redirect()->to('/kecamatan');
+        return redirect()->to('/Kecamatan');
     }
 
     public function Delete()
     {
         $this->kecamatanModel->delete($this->request->getPost('id_kecamatan'));
         session()->setFlashdata('success', 'Data berhasil dihapus');
-        return redirect()->to('/kecamatan');
+        return redirect()->to('/Kecamatan');
     }
 }

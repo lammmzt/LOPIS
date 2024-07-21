@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\kelurahanModel;
 use App\Models\kecamatanModel;
 use App\Models\kotaModel;
+use Ramsey\Uuid\Uuid;
 use CodeIgniter\HTTP\ResponseInterface;
 
 
@@ -34,7 +35,7 @@ class Kelurahan extends BaseController
             'validation' => \Config\Services::validation(),
         ];
         // dd($data);
-        return view('Admin/kelurahan/index', $data);
+        return view('Admin/Kelurahan/index', $data);
     }
 
 
@@ -72,45 +73,60 @@ class Kelurahan extends BaseController
                 ]
             ],
         ])) {
-            session()->setFlashdata('error', 'Nama kelurahan sudah ada');
-            return redirect()->to('/kelurahan')->withInput();
+            $validation = \Config\Services::validation();
+            session()->setFlashdata('error', $validation->listErrors());
+            return redirect()->to('/Kelurahan')->withInput();
         }
-        $this->kelurahanModel->save([
+        $this->kelurahanModel->insert([
+            'id_kelurahan' => Uuid::uuid4()->getHex(),
             'nama_kelurahan' => $nama_kelurahan,
             'kecamatan_id' => $kecamatan_id,
             'created_at' => date('Y-m-d'),
         ]);
         session()->setFlashdata('success', 'Data berhasil ditambahkan');
-        return redirect()->to('/kelurahan');
+        return redirect()->to('/Kelurahan');
     }
 
     public function Update()
     {
-        $nama_kelurahan = $this->request->getPost('name');
+        $nama_kelurahan = $this->request->getPost('nama_kelurahan');
         $id_kelurahan = $this->request->getPost('id_kelurahan');
+        // dd($id_kecamatan, $id_kelurahan, $nama_kelurahan);
+
         if (!$this->validate([
-            'name' => [
+            'nama_kelurahan' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Nama kelurahan harus diisi',
+                ]
+            ],
+            'kecamatan_id' => [
                 'rules' => 'required',
                 'errors' => [
                     'required' => 'Nama kelurahan harus diisi',
                 ]
             ],
         ])) {
-            session()->setFlashdata('error', 'Nama kelurahan sudah ada');
-            return redirect()->to('/kelurahan')->withInput();
+            //  get all errors
+            $validation = \Config\Services::validation();
+            session()->setFlashdata('error', $validation->listErrors());
+            return redirect()->to('/Kelurahan')->withInput();
         }
-        $this->kelurahanModel->save([
+
+        $this->kelurahanModel->update($id_kelurahan, [
             'nama_kelurahan' => $nama_kelurahan,
-            'id_kelurahan' => $id_kelurahan,
+            'kecamatan_id' => $this->request->getPost('kecamatan_id'),
+            'updated_at' => date('Y-m-d'),
         ]);
+
         session()->setFlashdata('success', 'Data berhasil diubah');
-        return redirect()->to('/kelurahan');
+        return redirect()->to('/Kelurahan');
     }
 
     public function Delete()
     {
         $this->kelurahanModel->delete($this->request->getPost('id_kelurahan'));
         session()->setFlashdata('success', 'Data berhasil dihapus');
-        return redirect()->to('/kelurahan');
+        return redirect()->to('/Kelurahan');
     }
 }

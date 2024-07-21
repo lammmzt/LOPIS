@@ -29,7 +29,7 @@
                 <span><i class="mdi mdi-help"></i></span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close">
                 </button>
-                <strong>Error!</strong> <?= session()->getFlashdata('success'); ?>
+                <strong>Error!</strong> <?= session()->getFlashdata('error'); ?>
             </div>
             <?php endif; ?>
             <div class="table-responsive table table-striped">
@@ -92,7 +92,7 @@
                         <div class="mb-3 row">
                             <label class="col-sm-3 col-form-label">Nama Kota</label>
                             <div class="col-sm-9">
-                                <select id="single-select" name="kota_id" class="edit_select">
+                                <select id="single-select" name="kota_id" class="edit_select" required>
                                     <option value="">--pilih kota--</option>
                                     <?php
                                     foreach ($kota as $dk) :
@@ -108,7 +108,7 @@
                             <label class="col-sm-3 col-form-label">Nama kecamatan</label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" placeholder="Masukan nama kecamatan" name="name"
-                                    id="name">
+                                    id="name" required>
                             </div>
                         </div>
                     </div>
@@ -139,7 +139,7 @@
                         <div class="mb-3 row">
                             <label class="col-sm-3 col-form-label">Nama Kota</label>
                             <div class="col-sm-9">
-                                <select id="edit_select" name="kota_id" class=" form-control wide mb-3">
+                                <select id="edit_select" name="kota_id" class=" form-control wide mb-3" required>
                                     <option value="">--pilih kota--</option>
 
                                 </select>
@@ -150,7 +150,7 @@
                             <label class="col-sm-3 col-form-label">kecamatan</label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" placeholder="Masukan nama kecamatan" name="name"
-                                    id="edit_nama_kec" value="">
+                                    id="edit_nama_kec" value="" required>
                             </div>
                         </div>
                     </div>
@@ -204,6 +204,15 @@ foreach ($kecamatan as $data) :
 <script src="<?= base_url('Assets/') ?>vendor/select2/js/select2.full.min.js"></script>
 <script src="<?= base_url('Assets/') ?>js/plugins-init/select2-init.js"></script>
 <script>
+$('#edit_select').select2();
+//set waktu hide alert
+window.setTimeout(function() {
+    $(".alert").fadeTo(500, 0).slideUp(500, function() {
+        $(this).remove();
+    });
+}, 3000);
+
+// datatables
 var table = $('#example3').DataTable({
     language: {
         paginate: {
@@ -211,18 +220,25 @@ var table = $('#example3').DataTable({
             previous: '<i class="fa fa-angle-double-left" aria-hidden="true"></i>',
         },
     },
+    "columnDefs": [{
+        "targets": [3, 0],
+        "orderable": false
+    }]
 });
 
 
-$('#edit_select').select2();
-
+// fungsi untuk edit kota 
 function editKota($id_kota) {
     $.ajax({
+        // mengambil data kota
         url: "<?= base_url('Kota/fetch_all') ?>",
         type: "GET",
         dataType: "json",
         success: function(data) {
             var html = '';
+            // console.log(data.data);
+
+            // looping data kota
             for (var i = 0; i < data.data.length; i++) {
                 if (data.data[i].id_kota == $id_kota) {
                     html += '<option value="' + data.data[i].id_kota + '" selected>' + data.data[i]
@@ -233,28 +249,30 @@ function editKota($id_kota) {
                         '</option>';
                 }
             }
+            // masukan data kota ke dalam select
             $('#edit_select').append(html);
         }
     });
 }
 
 
-// when click the editModal
+// ketika modal edit muncul
 $('#editModal').on('show.bs.modal', function(event) {
-    var button = $(event.relatedTarget)
-    var id = button[0].id
+    var button = $(event.relatedTarget) // Ketika tombol di klik
+    var id = button[0].id // Mengambil id dari tombol yang di klik
     // alert(id)
     $.ajax({
-        url: "<?= base_url('Kecamatan/fetch_all/') ?>" + id,
+        url: "<?= base_url('Kecamatan/fetch_all/') ?>" + id, // ambil data kecamatan berdasarkan id
         type: "GET",
         dataType: "json",
         success: function(data) {
             if (data.error == false) {
                 // console.log(data.data);
-                $('#edit_select').empty();
-                $('#edit_nama_kec').val(data.data.nama_kecamatan);
-                let kota = data.data.kota_id;
-                editKota(kota);
+                $('#edit_select').empty(); // hapus data select
+                $('#edit_nama_kec').val(data.data
+                    .nama_kecamatan); // masukan data kecamatan ke dalam input
+                let kota = data.data.kota_id; // ambil id kota
+                editKota(kota); // panggil fungsi edit kota
             }
         }
     });

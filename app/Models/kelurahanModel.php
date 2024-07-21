@@ -9,7 +9,7 @@ class kelurahanModel extends Model
 {
     protected $table = 'Kelurahan';
     protected $primaryKey = 'id_kelurahan';
-    protected $allowedFields = ['nama_kelurahan', 'kecamatan_id', 'created_at', 'updated_at'];
+    protected $allowedFields = ['id_kelurahan', 'nama_kelurahan', 'kecamatan_id', 'created_at', 'updated_at'];
 
     public function getKelurahan($id = false)
     {
