@@ -1,22 +1,25 @@
-<?php 
+<?php
+
 namespace App\Controllers;
 
 use App\Models\kecamatanModel;
 use App\Models\kotaModel;
 
 
-class Kecamatan extends BaseController{
+class Kecamatan extends BaseController
+{
 
     protected $kecamatanModel;
     protected $kotaModel;
-    
+
     public function __construct()
     {
         $this->kecamatanModel = new kecamatanModel();
         $this->kotaModel = new kotaModel();
     }
 
-    public function index(){
+    public function index()
+    {
         $data = [
             'title' => 'Kecamatan - LOPIS',
             'menu' => 'kecamatan',
@@ -25,13 +28,18 @@ class Kecamatan extends BaseController{
             'kota' => $this->kotaModel->findAll(),
             'validation' => \Config\Services::validation(),
         ];
-        
+
         // dd($data);
         return view('Admin/kecamatan/index', $data);
     }
 
-    public function fetch_all(){
-        $data_kecamatan = $this->kecamatanModel->findAll();
+    public function fetch_all($id = false)
+    {
+        if ($id == false) {
+            $data_kecamatan = $this->kecamatanModel->findAll();
+        } else {
+            $data_kecamatan = $this->kecamatanModel->where('id_kecamatan', $id)->first();
+        }
 
         return $this->response->setJSON([
             'error' => false,
@@ -40,7 +48,9 @@ class Kecamatan extends BaseController{
         ]);
     }
 
-    public function fetch_by_kota(){
+
+    public function fetch_by_kota()
+    {
         $kota_id = $this->request->getPost('kota_id');
         $data_kecamatan = $this->kecamatanModel->where('kota_id', $kota_id)->findAll();
 
@@ -51,7 +61,8 @@ class Kecamatan extends BaseController{
         ]);
     }
 
-    public function Save(){
+    public function Save()
+    {
         $nama_kecamatan = $this->request->getPost('name');
         $kota_id = $this->request->getPost('kota_id');
         if (!$this->validate([
@@ -81,7 +92,8 @@ class Kecamatan extends BaseController{
         return redirect()->to('/kecamatan');
     }
 
-    public function Update(){
+    public function Update()
+    {
         $nama_kecamatan = $this->request->getPost('name');
         $id_kecamatan = $this->request->getPost('id_kecamatan');
         if (!$this->validate([
@@ -98,17 +110,17 @@ class Kecamatan extends BaseController{
         $this->kecamatanModel->save([
             'nama_kecamatan' => $nama_kecamatan,
             'id_kecamatan' => $id_kecamatan,
+            'kota_id' => $this->request->getPost('kota_id'),
+            'updated_at' => date('Y-m-d'),
         ]);
         session()->setFlashdata('success', 'Data berhasil diubah');
         return redirect()->to('/kecamatan');
     }
 
-    public function Delete(){
+    public function Delete()
+    {
         $this->kecamatanModel->delete($this->request->getPost('id_kecamatan'));
         session()->setFlashdata('success', 'Data berhasil dihapus');
         return redirect()->to('/kecamatan');
     }
 }
-
-
-?>

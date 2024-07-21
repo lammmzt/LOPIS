@@ -17,7 +17,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close">
                 </button> <strong>Success!</strong> <?= session()->getFlashdata('success'); ?>
             </div>
-            <?php endif;?>
+            <?php endif; ?>
             <!-- <div class="alert alert-warning solid alert-end-icon alert-dismissible fade show">
                 <span><i class="mdi mdi-alert"></i></span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close">
@@ -31,7 +31,7 @@
                 </button>
                 <strong>Error!</strong> <?= session()->getFlashdata('success'); ?>
             </div>
-            <?php endif;?>
+            <?php endif; ?>
             <div class="table-responsive table table-striped">
                 <table id="example3" class="display" style="min-width: 845px">
                     <thead>
@@ -43,9 +43,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php 
+                        <?php
                         $no = 1;
-                        foreach ($kelurahan as $data):
+                        foreach ($kelurahan as $data) :
                         ?>
                         <tr>
                             <td>
@@ -60,16 +60,15 @@
 
                             <td>
                                 <div class="d-flex">
-                                    <a href="#" class="btn btn-primary shadow btn-xs sharp me-1" data-bs-toggle="modal"
-                                        data-bs-target="#edit<?= $data['id_kelurahan']; ?>"><i
-                                            class="fas fa-pencil-alt"></i></a>
+                                    <a href="#" class="btn btn-primary shadow btn-xs sharp me-1 edit_modal"
+                                        data-bs-toggle="modal" id="<?= $data['id_kelurahan']; ?>"
+                                        data-bs-target="#edit"><i class="fas fa-pencil-alt"></i></a>
                                     <a href="#" class="btn btn-danger shadow btn-xs sharp" data-bs-toggle="modal"
                                         data-bs-target="#hapus<?= $data['id_kelurahan']; ?>"><i
                                             class="fa fa-trash"></i></a>
                                 </div>
                             </td>
                         </tr>
-
                         <?php endforeach; ?>
                     </tbody>
                 </table>
@@ -128,12 +127,10 @@
 </div>
 
 <!-- Modal edit-->
-<?php 
-foreach ($kelurahan as $data):
-?>
+
 
 <!-- Modal edit-->
-<div class="modal fade" id="edit<?= $data['id_kelurahan']; ?>" style="z-index: 9999;">
+<div class="modal fade" id="edit">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -150,15 +147,7 @@ foreach ($kelurahan as $data):
                             <div class="col-sm-9">
                                 <select id="edit_kota" name="kota_id" class="form-control">
                                     <option value="">--pilih kota--</option>
-                                    <?php
-                                    foreach ($kota as $dk):
-                                    ?>
-                                    <option value="<?= $dk['id_kota']; ?>"
-                                        <?= $dk['id_kota'] == $data['kota_id'] ? 'selected' : ''; ?>>
-                                        <?= $dk['nama_kota']; ?></option>
-                                    <?php
-                                    endforeach;
-                                    ?>
+
                                 </select>
                             </div>
                         </div>
@@ -168,24 +157,16 @@ foreach ($kelurahan as $data):
                             <div class="col-sm-9">
                                 <select id="edit_kecamatan" name="kecamatan_id" class="form-control">
                                     <option value="">--pilih kecamatan--</option>
-                                    <?php
-                                    foreach ($kecamatan as $dk):
-                                    ?>
-                                    <option value="<?= $dk['id_kecamatan']; ?>"
-                                        <?= $dk['id_kecamatan'] == $data['kecamatan_id'] ? 'selected' : ''; ?>>
-                                        <?= $dk['nama_kecamatan']; ?></option>
-                                    <?php
-                                    endforeach;
-                                    ?>
+
                                 </select>
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <input type="hidden" value="<?= $data['id_kelurahan']; ?>" name="id_kelurahan">
+                            <input type="hidden" value="" name="id_kelurahan" id="id_kelurahan">
                             <label class="col-sm-3 col-form-label">Nama kelurahan</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" placeholder="Masukan nama kelurahan" name="name"
-                                    id="name" value="<?= $data['nama_kelurahan']; ?>">
+                                <input type="text" class="form-control" placeholder="Masukan nama kelurahan"
+                                    name="nama_kelurahan" id="editnama_kelurahan" value="">
                             </div>
                         </div>
                     </div>
@@ -199,7 +180,9 @@ foreach ($kelurahan as $data):
         </div>
     </div>
 </div>
-
+<?php
+foreach ($kelurahan as $data) :
+?>
 <!-- modal hapus -->
 <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true"
     id="hapus<?= $data['id_kelurahan']; ?>">
@@ -215,7 +198,7 @@ foreach ($kelurahan as $data):
                     <p>
                         Apakah anda yakin menghapus data ini?
                     </p>
-                    <input type="hidden" name="id_kelurahan" value="<?= $data['id_kelurahan']; ?>">
+                    <input type="hidden" name="id_kelurahan" value="<?= $data['id_kelurahan']; ?>" id="id_kelurahan">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Tidak</button>
@@ -223,7 +206,6 @@ foreach ($kelurahan as $data):
             </form>
         </div>
     </div>
-</div>
 </div>
 <?php endforeach; ?>
 
@@ -256,8 +238,6 @@ function getKota() {
     });
 }
 
-getKota();
-
 // ketika memilih kota
 $('#kota').on('change', function() {
     var kota_id = $(this).val();
@@ -281,9 +261,82 @@ $('#kota').on('change', function() {
     });
 });
 
+function editKota(id_kota) {
+    $('#edit_kota').html('');
+    $.ajax({
+        url: "<?= base_url('Kota/fetch_all') ?>",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            var html = '';
+            for (var i = 0; i < data.data.length; i++) {
+                if (data.data[i].id_kota == id_kota) {
+                    html += '<option value="' + data.data[i].id_kota + '" selected>' + data.data[i]
+                        .nama_kota +
+                        '</option>';
+                } else {
+                    html += '<option value="' + data.data[i].id_kota + '">' + data.data[i].nama_kota +
+                        '</option>';
+                }
+            }
+            $('#edit_kota').append(html);
+        }
+    });
+}
+
+function editKel(kota_id, kecamatan_id) {
+    $('#edit_kecamatan').html('');
+    $.ajax({
+        url: "<?= base_url('Kecamatan/fetch_by_kota') ?>",
+        type: "POST",
+        data: {
+            kota_id: kota_id
+        },
+        dataType: "json",
+        success: function(data) {
+            var html = '';
+            html += '<option value="">--pilih kecamatan--</option>';
+            for (var i = 0; i < data.data.length; i++) {
+                if (data.data[i].id_kecamatan == kecamatan_id) {
+                    html += '<option value="' + data.data[i].id_kecamatan + '" selected>' + data.data[i]
+                        .nama_kecamatan +
+                        '</option>';
+                } else {
+                    html += '<option value="' + data.data[i].id_kecamatan + '">' + data.data[i]
+                        .nama_kecamatan +
+                        '</option>';
+                }
+            }
+            $('#edit_kecamatan').html(html);
+        }
+    });
+}
+
+// when change the edit kota
+$('#edit_kota').on('change', function() {
+    var kota_id = $(this).val();
+    editKel(kota_id, '0');
+});
+
+$('.edit_modal').on('click', function() {
+    var id_kelurahan = $(this).attr('id');
+    // alert(id_kelurahan);
+    $.ajax({
+        url: "<?= base_url('Kelurahan/fetch_kel') ?>/" + id_kelurahan,
+        type: "GET",
+
+        dataType: "json",
+        success: function(data) {
+            editKota(data.data.kota_id);
+            editKel(data.data.kota_id, data.data.kecamatan_id);
+            $('#id_kelurahan').val(data.data.id_kelurahan);
+            $('#editnama_kelurahan').val(data.data.nama_kelurahan);
+
+        }
+    });
+});
+
 // ketika memilih edit kel
-
-
 var table = $('#example3').DataTable({
     language: {
         paginate: {

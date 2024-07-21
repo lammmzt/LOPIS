@@ -1,10 +1,13 @@
-<?php 
+<?php
+
 namespace App\Controllers;
 
 use App\Models\usersModel;
 use App\Models\detailUsersModel;
 use App\Models\kelurahanModel;
-class Users extends BaseController{
+
+class Users extends BaseController
+{
 
     protected $usersModel;
     protected $detailUsersModel;
@@ -14,10 +17,10 @@ class Users extends BaseController{
         $this->usersModel = new UsersModel();
         $this->detailUsersModel = new detailUsersModel();
         $this->kelurahanModel = new kelurahanModel();
-
     }
 
-    public function index(){
+    public function index()
+    {
         $data = [
             'title' => 'users - LOPIS',
             'menu' => 'users',
@@ -25,11 +28,12 @@ class Users extends BaseController{
             'users' => $this->usersModel->findAll(),
             'validation' => \Config\Services::validation(),
         ];
-        
+
         return view('Admin/Users/index', $data);
     }
 
-    public function Save(){
+    public function Save()
+    {
         $username = $this->request->getPost('username');
         $password = $this->request->getPost('password');
         $role = $this->request->getPost('role');
@@ -45,7 +49,7 @@ class Users extends BaseController{
                 'rules' => 'required',
                 'errors' => [
                     'required' => 'password harus diisi',
-                    
+
                 ]
             ],
             'role' => [
@@ -67,7 +71,8 @@ class Users extends BaseController{
         return redirect()->to('/Users');
     }
 
-    public function Update(){
+    public function Update()
+    {
         $username = $this->request->getPost('username');
         $id_user = $this->request->getPost('id_user');
         $role = $this->request->getPost('role');
@@ -76,16 +81,16 @@ class Users extends BaseController{
                 'rules' => 'required',
                 'errors' => [
                     'required' => 'Username harus diisi',
-                
+
                 ]
-            ], 
+            ],
             'role' => [
                 'rules' => 'required',
                 'errors' => [
                     'required' => 'role harus diisi',
                 ]
             ],
-        ]))  {
+        ])) {
             session()->setFlashdata('error', 'Nama users sudah ada');
             return redirect()->to('/users')->withInput();
         }
@@ -98,7 +103,8 @@ class Users extends BaseController{
         return redirect()->to('/Users');
     }
 
-    public function Delete(){
+    public function Delete()
+    {
         $this->usersModel->delete($this->request->getPost('id_user'));
         session()->setFlashdata('success', 'Data berhasil dihapus');
         return redirect()->to('/Users');
@@ -106,8 +112,9 @@ class Users extends BaseController{
 
 
     // Detail User
-    public function Detail(){
-        $data=[
+    public function Detail()
+    {
+        $data = [
             'title' => 'Detail User - LOPIS',
             'menu' => 'Detail User',
             'sub_menu' => 'User',
@@ -118,9 +125,9 @@ class Users extends BaseController{
         ];
         // dd($data);
         return view('Admin/Users/detail', $data);
-        
     }
-    public function save_detail_user(){
+    public function save_detail_user()
+    {
         $user_id = $this->request->getPost('user_id');
         $nama_user = $this->request->getPost('nama_user');
         $jenis_kelamin = $this->request->getPost('jenis_kelamin');
@@ -133,7 +140,7 @@ class Users extends BaseController{
                     'required' => 'Username harus diisi',
                     'is_unique' => 'Username sudah terdaftar'
                 ]
-            
+
             ],
         ])) {
             session()->setFlashdata('error', 'Nama users sudah ada');
@@ -150,6 +157,3 @@ class Users extends BaseController{
         return redirect()->to('/Users/detail');
     }
 }
-
-
-?>

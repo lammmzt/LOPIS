@@ -1,19 +1,22 @@
-<?php 
+<?php
+
 namespace App\Controllers;
 
 use App\Models\kotaModel;
 use CodeIgniter\HTTP\ResponseInterface;
 
-class Kota extends BaseController{
+class Kota extends BaseController
+{
 
     protected $kotaModel;
-    
+
     public function __construct()
     {
         $this->kotaModel = new kotaModel();
     }
 
-    public function index(){
+    public function index()
+    {
         $data = [
             'title' => 'Kota - LOPIS',
             'menu' => 'Kota',
@@ -21,12 +24,13 @@ class Kota extends BaseController{
             'kota' => $this->kotaModel->findAll(),
             'validation' => \Config\Services::validation(),
         ];
-        
+
         return view('Admin/Kota/index', $data);
     }
 
-    public function fetch_all(){
-        $data_kota = $this->kotaModel->findAll();
+    public function fetch_all()
+    {
+        $data_kota = $this->kotaModel->orderBy('nama_kota', 'ASC')->findAll();
 
         return $this->response->setJSON([
             'error' => false,
@@ -35,7 +39,8 @@ class Kota extends BaseController{
         ]);
     }
 
-    public function Save(){
+    public function Save()
+    {
         $nama_kota = $this->request->getPost('name');
         if (!$this->validate([
             'name' => [
@@ -56,7 +61,8 @@ class Kota extends BaseController{
         return redirect()->to('/Kota');
     }
 
-    public function Update(){
+    public function Update()
+    {
         $nama_kota = $this->request->getPost('name');
         $id_kota = $this->request->getPost('id_kota');
         if (!$this->validate([
@@ -78,12 +84,10 @@ class Kota extends BaseController{
         return redirect()->to('/Kota');
     }
 
-    public function Delete(){
+    public function Delete()
+    {
         $this->kotaModel->delete($this->request->getPost('id_kota'));
         session()->setFlashdata('success', 'Data berhasil dihapus');
         return redirect()->to('/Kota');
     }
 }
-
-
-?>

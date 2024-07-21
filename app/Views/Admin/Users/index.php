@@ -16,7 +16,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close">
                 </button> <strong>Success!</strong> <?= session()->getFlashdata('success'); ?>
             </div>
-            <?php endif;?>
+            <?php endif; ?>
             <!-- <div class="alert alert-warning solid alert-end-icon alert-dismissible fade show">
                 <span><i class="mdi mdi-alert"></i></span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close">
@@ -30,7 +30,7 @@
                 </button>
                 <strong>Error!</strong> <?= session()->getFlashdata('success'); ?>
             </div>
-            <?php endif;?>
+            <?php endif; ?>
             <div class="table-responsive table table-striped">
                 <table id="example3" class="display" style="min-width: 845px">
                     <thead>
@@ -42,9 +42,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php 
+                        <?php
                         $no = 1;
-                        foreach ($users as $data):
+                        foreach ($users as $data) :
                         ?>
                         <tr>
                             <td>
@@ -54,17 +54,17 @@
                                 <?= $data['username']; ?>
                             </td>
                             <td>
-                                <?php 
-                                if ($data['role'] == '1'){
-                                    echo 'Admin';
-                                }else if ($data['role'] == '2'){
-                                    echo 'Admin PKM';
-                                }else if ($data['role'] == '3'){
-                                    echo 'Admin Kelurahan';
-                                }else {
-                                    echo 'Supervisor';
-                                }
-                                ?>
+                                <?php
+                                    if ($data['role'] == '1') {
+                                        echo 'Admin';
+                                    } else if ($data['role'] == '2') {
+                                        echo 'Admin PKM';
+                                    } else if ($data['role'] == '3') {
+                                        echo 'Admin Kelurahan';
+                                    } else {
+                                        echo 'Supervisor';
+                                    }
+                                    ?>
                             </td>
                             <td>
                                 <div class="d-flex">
@@ -136,8 +136,8 @@
     </div>
 </div>
 
-<?php 
-foreach ($users as $data):
+<?php
+foreach ($users as $data) :
 ?>
 
 <!-- Modal edit-->
@@ -167,25 +167,25 @@ foreach ($users as $data):
                                     <option value="">
                                         pilih role
                                     </option>
-                                    <option value="1" <?= ($data['role'] == '1')?  'selected':''  ?>>Admin</option>
-                                    <option value="2" <?= ($data['role'] == '2')?  'selected':''  ?>>Admin PKM</option>
-                                    <option value="3" <?= ($data['role'] == '3')?  'selected':''  ?>>Admin Kelurahan
+                                    <option value="1" <?= ($data['role'] == '1') ?  'selected' : ''  ?>>Admin</option>
+                                    <option value="2" <?= ($data['role'] == '2') ?  'selected' : ''  ?>>Admin PKM
                                     </option>
-                                    <option value="4" <?= ($data['role'] == '4')?  'selected':''  ?>>Supervisor</option>
+                                    <option value="3" <?= ($data['role'] == '3') ?  'selected' : ''  ?>>Admin Kelurahan
+                                    </option>
+                                    <option value="4" <?= ($data['role'] == '4') ?  'selected' : ''  ?>>Supervisor
+                                    </option>
                                 </select>
                             </div>
                         </div>
                     </div>
                 </div>
-
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+            </form>
         </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Update</button>
-        </div>
-        </form>
     </div>
-</div>
 </div>
 
 <!-- modal hapus -->

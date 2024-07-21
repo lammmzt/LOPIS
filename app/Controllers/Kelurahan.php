@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 namespace App\Controllers;
 
 use App\Models\kelurahanModel;
@@ -8,18 +9,20 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 
 
-class Kelurahan extends BaseController{
+class Kelurahan extends BaseController
+{
 
     protected $kelurahanModel;
     protected $kecamatanModel;
-    
+
     public function __construct()
     {
         $this->kelurahanModel = new kelurahanModel();
         $this->kecamatanModel = new kecamatanModel();
     }
 
-    public function index(){
+    public function index()
+    {
         $kotaModel = new kotaModel();
         $data = [
             'title' => 'kelurahan - LOPIS',
@@ -34,8 +37,14 @@ class Kelurahan extends BaseController{
         return view('Admin/kelurahan/index', $data);
     }
 
-    public function fetch_kel(){
-        $data_kel = $this->kelurahanModel->findAll();
+
+    public function fetch_kel($id = false)
+    {
+        if ($id == false) {
+            $data_kel = $this->kelurahanModel->getKelurahan();
+        } else {
+            $data_kel = $this->kelurahanModel->getKelurahan($id);
+        }
 
         return $this->response->setJSON([
             'error' => false,
@@ -44,7 +53,8 @@ class Kelurahan extends BaseController{
         ]);
     }
 
-    public function Save(){
+    public function Save()
+    {
         $nama_kelurahan = $this->request->getPost('name');
         $kecamatan_id = $this->request->getPost('kecamatan_id');
         if (!$this->validate([
@@ -74,7 +84,8 @@ class Kelurahan extends BaseController{
         return redirect()->to('/kelurahan');
     }
 
-    public function Update(){
+    public function Update()
+    {
         $nama_kelurahan = $this->request->getPost('name');
         $id_kelurahan = $this->request->getPost('id_kelurahan');
         if (!$this->validate([
@@ -96,12 +107,10 @@ class Kelurahan extends BaseController{
         return redirect()->to('/kelurahan');
     }
 
-    public function Delete(){
+    public function Delete()
+    {
         $this->kelurahanModel->delete($this->request->getPost('id_kelurahan'));
         session()->setFlashdata('success', 'Data berhasil dihapus');
         return redirect()->to('/kelurahan');
     }
 }
-
-
-?>

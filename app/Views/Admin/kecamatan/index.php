@@ -17,7 +17,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close">
                 </button> <strong>Success!</strong> <?= session()->getFlashdata('success'); ?>
             </div>
-            <?php endif;?>
+            <?php endif; ?>
             <!-- <div class="alert alert-warning solid alert-end-icon alert-dismissible fade show">
                 <span><i class="mdi mdi-alert"></i></span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close">
@@ -31,7 +31,7 @@
                 </button>
                 <strong>Error!</strong> <?= session()->getFlashdata('success'); ?>
             </div>
-            <?php endif;?>
+            <?php endif; ?>
             <div class="table-responsive table table-striped">
                 <table id="example3" class="display" style="min-width: 845px">
                     <thead>
@@ -43,9 +43,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php 
+                        <?php
                         $no = 1;
-                        foreach ($kecamatan as $data):
+                        foreach ($kecamatan as $data) :
                         ?>
                         <tr>
                             <td>
@@ -60,7 +60,7 @@
                             <td>
                                 <div class="d-flex">
                                     <a href="#" class="btn btn-primary shadow btn-xs sharp me-1" data-bs-toggle="modal"
-                                        data-bs-target="#edit<?= $data['id_kecamatan']; ?>"><i
+                                        id=<?= $data['id_kecamatan']; ?> data-bs-target="#editModal"><i
                                             class="fas fa-pencil-alt"></i></a>
                                     <a href="#" class="btn btn-danger shadow btn-xs sharp" data-bs-toggle="modal"
                                         data-bs-target="#hapus<?= $data['id_kecamatan']; ?>"><i
@@ -92,15 +92,15 @@
                         <div class="mb-3 row">
                             <label class="col-sm-3 col-form-label">Nama Kota</label>
                             <div class="col-sm-9">
-                                <select id="single-select" name="kota_id">
+                                <select id="single-select" name="kota_id" class="edit_select">
                                     <option value="">--pilih kota--</option>
-                                    <?php 
-                                    foreach($kota as $dk):
-                                ?>
+                                    <?php
+                                    foreach ($kota as $dk) :
+                                    ?>
                                     <option value="<?= $dk['id_kota']; ?>"><?= $dk['nama_kota']; ?></option>
-                                    <?php 
-                                endforeach;
-                                ?>
+                                    <?php
+                                    endforeach;
+                                    ?>
                                 </select>
                             </div>
                         </div>
@@ -123,12 +123,9 @@
     </div>
 </div>
 
-<?php 
-foreach ($kecamatan as $data):
-?>
 
 <!-- Modal edit-->
-<div class="modal fade" id="edit<?= $data['id_kecamatan']; ?>" style="z-index: 9999;">
+<div class="modal fade" id="editModal">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -140,11 +137,20 @@ foreach ($kecamatan as $data):
                 <div class="modal-body">
                     <div class="basic-form">
                         <div class="mb-3 row">
+                            <label class="col-sm-3 col-form-label">Nama Kota</label>
+                            <div class="col-sm-9">
+                                <select id="edit_select" name="kota_id" class=" form-control wide mb-3">
+                                    <option value="">--pilih kota--</option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
                             <input type="hidden" value="<?= $data['id_kecamatan']; ?>" name="id_kecamatan">
                             <label class="col-sm-3 col-form-label">kecamatan</label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" placeholder="Masukan nama kecamatan" name="name"
-                                    id="name" value="<?= $data['nama_kecamatan']; ?>">
+                                    id="edit_nama_kec" value="">
                             </div>
                         </div>
                     </div>
@@ -159,6 +165,10 @@ foreach ($kecamatan as $data):
     </div>
 </div>
 
+
+<?php
+foreach ($kecamatan as $data) :
+?>
 <!-- modal hapus -->
 <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true"
     id="hapus<?= $data['id_kecamatan']; ?>">
@@ -183,7 +193,6 @@ foreach ($kecamatan as $data):
         </div>
     </div>
 </div>
-</div>
 <?php endforeach; ?>
 
 
@@ -202,6 +211,53 @@ var table = $('#example3').DataTable({
             previous: '<i class="fa fa-angle-double-left" aria-hidden="true"></i>',
         },
     },
+});
+
+
+$('#edit_select').select2();
+
+function editKota($id_kota) {
+    $.ajax({
+        url: "<?= base_url('Kota/fetch_all') ?>",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            var html = '';
+            for (var i = 0; i < data.data.length; i++) {
+                if (data.data[i].id_kota == $id_kota) {
+                    html += '<option value="' + data.data[i].id_kota + '" selected>' + data.data[i]
+                        .nama_kota +
+                        '</option>';
+                } else {
+                    html += '<option value="' + data.data[i].id_kota + '">' + data.data[i].nama_kota +
+                        '</option>';
+                }
+            }
+            $('#edit_select').append(html);
+        }
+    });
+}
+
+
+// when click the editModal
+$('#editModal').on('show.bs.modal', function(event) {
+    var button = $(event.relatedTarget)
+    var id = button[0].id
+    // alert(id)
+    $.ajax({
+        url: "<?= base_url('Kecamatan/fetch_all/') ?>" + id,
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            if (data.error == false) {
+                // console.log(data.data);
+                $('#edit_select').empty();
+                $('#edit_nama_kec').val(data.data.nama_kecamatan);
+                let kota = data.data.kota_id;
+                editKota(kota);
+            }
+        }
+    });
 });
 </script>
 <?= $this->endSection('datatables'); ?>
