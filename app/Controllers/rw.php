@@ -1,22 +1,25 @@
-<?php 
+<?php
+
 namespace App\Controllers;
 
 use App\Models\rwModel;
 use App\Models\kelurahanModel;
 
 
-class rw extends BaseController{
+class rw extends BaseController
+{
 
     protected $rwModel;
     protected $kelurahanModel;
-    
+
     public function __construct()
     {
         $this->rwModel = new rwModel();
         $this->kelurahanModel = new kelurahanModel();
     }
 
-    public function index(){
+    public function index()
+    {
         $data = [
             'title' => 'rw - LOPIS',
             'menu' => 'rw',
@@ -25,12 +28,39 @@ class rw extends BaseController{
             'kelurahan' => $this->kelurahanModel->findAll(),
             'validation' => \Config\Services::validation(),
         ];
-        
+
         // dd($data);
         return view('Admin/rw/index', $data);
     }
 
-    public function Save(){
+    public function fetch_all($id = false)
+    {
+        if ($id == false) {
+            $data_rw = $this->rwModel->getrw();
+        } else {
+            $data_rw = $this->rwModel->getrw($id);
+        }
+
+        return $this->response->setJSON([
+            'error' => false,
+            'data' => $data_rw,
+            'status' => '200'
+        ]);
+    }
+
+    public function get_rw_by_kelurahan()
+    {
+        $id = $this->request->getPost('kelurahan_id');
+        $data_rw = $this->rwModel->where('kelurahan_id', $id)->findAll();
+        return $this->response->setJSON([
+            'error' => false,
+            'data' => $data_rw,
+            'status' => '200'
+        ]);
+    }
+
+    public function Save()
+    {
         $nama_rw = $this->request->getPost('name');
         $kelurahan_id = $this->request->getPost('kelurahan_id');
         if (!$this->validate([
@@ -60,7 +90,8 @@ class rw extends BaseController{
         return redirect()->to('/rw');
     }
 
-    public function Update(){
+    public function Update()
+    {
         $nama_rw = $this->request->getPost('name');
         $id_rw = $this->request->getPost('id_rw');
         if (!$this->validate([
@@ -82,12 +113,10 @@ class rw extends BaseController{
         return redirect()->to('/rw');
     }
 
-    public function Delete(){
+    public function Delete()
+    {
         $this->rwModel->delete($this->request->getPost('id_rw'));
         session()->setFlashdata('success', 'Data berhasil dihapus');
         return redirect()->to('/rw');
     }
 }
-
-
-?>

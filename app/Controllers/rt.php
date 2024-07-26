@@ -1,36 +1,44 @@
-<?php 
+<?php
+
 namespace App\Controllers;
 
 use App\Models\rtModel;
 use App\Models\rwModel;
+use App\Models\kelurahanModel;
 
 
-class rt extends BaseController{
+class rt extends BaseController
+{
 
     protected $rtModel;
     protected $rwModel;
-    
+    protected $kelurahanModel;
+
     public function __construct()
     {
         $this->rtModel = new rtModel();
         $this->rwModel = new rwModel();
+        $this->kelurahanModel = new kelurahanModel();
     }
 
-    public function index(){
+    public function index()
+    {
         $data = [
             'title' => 'rt - LOPIS',
             'menu' => 'rt',
             'sub_menu' => 'Dashboard',
             'rt' => $this->rtModel->getrt(),
             'rw' => $this->rwModel->findAll(),
+            'kelurahan' => $this->kelurahanModel->findAll(),
             'validation' => \Config\Services::validation(),
         ];
-        
+
         // dd($data);
         return view('Admin/rt/index', $data);
     }
 
-    public function Save(){
+    public function Save()
+    {
         $nama_rt = $this->request->getPost('name');
         $rw_id = $this->request->getPost('rw_id');
         if (!$this->validate([
@@ -48,19 +56,21 @@ class rt extends BaseController{
                 ]
             ],
         ])) {
-            session()->setFlashdata('error', 'No rw sudah ada');
+            $validation = \Config\Services::validation();
+            session()->setFlashdata('error', $validation->listErrors());
             return redirect()->to('/rt')->withInput();
         }
         $this->rtModel->save([
             'nama_rt' => $nama_rt,
             'rw_id' => $rw_id,
-            'created_at' => date('Y-m-d'),
+            'created_at' => date('Y-m-d H:i:s'),
         ]);
         session()->setFlashdata('success', 'Data berhasil ditambahkan');
         return redirect()->to('/rt');
     }
 
-    public function Update(){
+    public function Update()
+    {
         $nama_rt = $this->request->getPost('name');
         $id_rt = $this->request->getPost('id_rt');
         if (!$this->validate([
@@ -82,12 +92,10 @@ class rt extends BaseController{
         return redirect()->to('/rt');
     }
 
-    public function Delete(){
+    public function Delete()
+    {
         $this->rtModel->delete($this->request->getPost('id_rt'));
         session()->setFlashdata('success', 'Data berhasil dihapus');
         return redirect()->to('/rt');
     }
 }
-
-
-?>

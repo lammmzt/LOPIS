@@ -17,7 +17,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close">
                 </button> <strong>Success!</strong> <?= session()->getFlashdata('success'); ?>
             </div>
-            <?php endif;?>
+            <?php endif; ?>
             <!-- <div class="alert alert-warning solid alert-end-icon alert-dismissible fade show">
                 <span><i class="mdi mdi-alert"></i></span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close">
@@ -31,7 +31,7 @@
                 </button>
                 <strong>Error!</strong> <?= session()->getFlashdata('success'); ?>
             </div>
-            <?php endif;?>
+            <?php endif; ?>
             <div class="table-responsive table table-striped">
                 <table id="example3" class="display" style="min-width: 845px">
                     <thead>
@@ -43,9 +43,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php 
+                        <?php
                         $no = 1;
-                        foreach ($rt as $data):
+                        foreach ($rt as $data) :
                         ?>
                         <tr>
                             <td>
@@ -89,18 +89,25 @@
             <form action="<?= base_url('rt/Save') ?>" method="post">
                 <div class="modal-body">
                     <div class="basic-form">
+                        <!-- pilih kel -->
                         <div class="mb-3 row">
-                            <label class="col-sm-3 col-form-label">No RW</label>
+                            <label class="col-sm-3 col-form-label">Nama Kelurahan</label>
                             <div class="col-sm-9">
-                                <select id="single-select" name="rw_id">
+                                <select id="kelurahan" name="kelurahan_id">
+                                    <option value="">--pilih kelurahan--</option>
+                                    <?php foreach ($kelurahan as $data) : ?>
+                                    <option value="<?= $data['id_kelurahan']; ?>"><?= $data['nama_kelurahan']; ?>
+                                    </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-sm-3 col-form-label">Nama RW</label>
+                            <div class="col-sm-9">
+                                <select id="rw_id" name="rw_id">
                                     <option value="">--pilih RW--</option>
-                                    <?php 
-                                    foreach($rw as $dk):
-                                ?>
-                                    <option value="<?= $dk['id_rw']; ?>"><?= $dk['nama_rw']; ?></option>
-                                    <?php 
-                                endforeach;
-                                ?>
+
                                 </select>
                             </div>
                         </div>
@@ -123,8 +130,8 @@
     </div>
 </div>
 
-<?php 
-foreach ($rt as $data):
+<?php
+foreach ($rt as $data) :
 ?>
 
 <!-- Modal edit-->
@@ -139,6 +146,34 @@ foreach ($rt as $data):
             <form action="<?= base_url('rt/Update') ?>" method="post">
                 <div class="modal-body">
                     <div class="basic-form">
+                        <div class="mb-3 row">
+                            <label class="col-sm-3 col-form-label">Kelurahan</label>
+                            <div class="col-sm-9">
+                                <select id="edit_kelurahan" name="kelurahan_id">
+                                    <option value="">--pilih kelurahan--</option>
+                                    <?php foreach ($kelurahan as $data_kel) : ?>
+                                    <option value="<?= $data_kel['id_kelurahan']; ?>"
+                                        <?= $data_kel['id_kelurahan'] == $data['id_kelurahan'] ? 'selected' : ''; ?>>
+                                        <?= $data_kel['nama_kelurahan']; ?>
+                                    </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-sm-3 col-form-label">RW</label>
+                            <div class="col-sm-9">
+                                <select id="edit_rw_id" name="rw_id">
+                                    <option value="">--pilih RW--</option>
+                                    <?php foreach ($rw as $data_rw) : ?>
+                                    <option value="<?= $data_rw['id_rw']; ?>"
+                                        <?= $data_rw['id_rw'] == $data['id_rw'] ? 'selected' : ''; ?>>
+                                        <?= $data_rw['nama_rw']; ?>
+                                    </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
                         <div class="mb-3 row">
                             <input type="hidden" value="<?= $data['id_rt']; ?>" name="id_rt">
                             <label class="col-sm-3 col-form-label">RT</label>
@@ -179,10 +214,10 @@ foreach ($rt as $data):
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Tidak</button>
                     <button type="submit" class="btn btn-primary">Yaa, Hapus</button>
+                </div>
             </form>
         </div>
     </div>
-</div>
 </div>
 <?php endforeach; ?>
 
@@ -195,6 +230,7 @@ foreach ($rt as $data):
 <script src="<?= base_url('Assets/') ?>vendor/select2/js/select2.full.min.js"></script>
 <script src="<?= base_url('Assets/') ?>js/plugins-init/select2-init.js"></script>
 <script>
+// datatable
 var table = $('#example3').DataTable({
     language: {
         paginate: {
@@ -202,6 +238,76 @@ var table = $('#example3').DataTable({
             previous: '<i class="fa fa-angle-double-left" aria-hidden="true"></i>',
         },
     },
+    "columnDefs": [{
+        "targets": [3, 0],
+        "orderable": false
+    }]
+});
+
+// select2
+$('#kelurahan').select2({
+    placeholder: "Pilih Kelurahan",
+    allowClear: true
+});
+$('#rw_id').select2({
+    placeholder: "Pilih RW",
+    allowClear: true
+});
+$('#edit_kelurahan').select2({
+    placeholder: "Pilih Kelurahan",
+    allowClear: true
+});
+$('#edit_rw_id').select2({
+    placeholder: "Pilih RW",
+    allowClear: true
+});
+
+// fungsi get rw
+function getRw() {
+    $('#rw_id').empty();
+    var kelurahan_id = $('#kelurahan').val();
+    $.ajax({
+        url: '<?= base_url('RW/get_rw_by_kelurahan') ?>',
+        type: 'post',
+        data: {
+            kelurahan_id: kelurahan_id
+        },
+        success: function(data) {
+            for (var i = 0; i < data.data.length; i++) {
+                $('#rw_id').append('<option value="' + data.data[i].id_rw + '">' + data.data[i].nama_rw +
+                    '</option>');
+            }
+        }
+    });
+}
+
+// ketika kelurahan di pilih
+$('#kelurahan').change(function() {
+    getRw();
+});
+
+function getEditRw() {
+    $('#edit_rw_id').empty();
+    var kelurahan_id = $('#edit_kelurahan').val();
+    $.ajax({
+        url: '<?= base_url('RW/get_rw_by_kelurahan') ?>',
+        type: 'post',
+        data: {
+            kelurahan_id: kelurahan_id
+        },
+        success: function(data) {
+            for (var i = 0; i < data.data.length; i++) {
+                $('#edit_rw_id').append('<option value="' + data.data[i].id_rw + '">' + data.data[i]
+                    .nama_rw +
+                    '</option>');
+            }
+        }
+    });
+}
+
+// ketika kelurahan di pilih
+$('#edit_kelurahan').change(function() {
+    getEditRw();
 });
 </script>
 <?= $this->endSection('datatables'); ?>

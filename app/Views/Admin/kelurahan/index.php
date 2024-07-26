@@ -37,8 +37,9 @@
                     <thead>
                         <tr>
                             <th style="width: 20px;">No</th>
-                            <th>Name kelurahan</th>
-                            <th>Name Kecamatan</th>
+                            <th>Nama kelurahan</th>
+                            <th>Nama Kecamatan</th>
+                            <th>Nama Kota</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -54,18 +55,22 @@
                             <td>
                                 <?= $data['nama_kelurahan']; ?>
                             </td>
+
                             <td>
                                 <?= $data['nama_kecamatan']; ?>
                             </td>
-
+                            <td>
+                                <?= $data['nama_kota']; ?>
+                            </td>
                             <td>
                                 <div class="d-flex">
                                     <a href="#" class="btn btn-primary shadow btn-xs sharp me-1 edit_modal"
                                         data-bs-toggle="modal" id="<?= $data['id_kelurahan']; ?>"
                                         data-bs-target="#edit"><i class="fas fa-pencil-alt"></i></a>
-                                    <button class="btn btn-danger shadow btn-xs sharp btn_hps"
-                                        id="<?= $data['id_kelurahan']; ?>" data-bs-toggle="modal"
-                                        data-bs-target="#hapus"><i class="fa fa-trash"></i></button>
+                                    <button class="btn btn-danger shadow btn-xs sharp btn_hps" id=""
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#hapusModal<?= $data['id_kelurahan']; ?>"><i
+                                            class="fa fa-trash"></i></button>
                                 </div>
                             </td>
                         </tr>
@@ -182,8 +187,12 @@
 </div>
 
 <!-- modal hapus -->
-<div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="hapus"
-    style="z-index: 9999;">
+<?php
+foreach ($kelurahan as $data) :
+?>
+<!-- modal hapus -->
+<div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true"
+    id="hapusModal<?= $data['id_kelurahan']; ?>">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
@@ -196,15 +205,17 @@
                     <p>
                         Apakah anda yakin menghapus data ini?
                     </p>
-                    <input type="hidden" name="id_kelurahan" id="hps_id_kelurahan">
+                    <input type="hidden" name="id_kelurahan" value="<?= $data['id_kelurahan']; ?>">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Tidak</button>
                     <button type="submit" class="btn btn-primary">Yaa, Hapus</button>
+                </div>
             </form>
         </div>
     </div>
 </div>
+<?php endforeach; ?>
 
 
 <?= $this->endSection('content'); ?>
@@ -368,12 +379,6 @@ $('.edit_modal').on('click', function() {
 
         }
     });
-});
-
-// ketika menekan btn hapus
-$('.btn_hps').on('click', function() {
-    var id_kelurahan = $(this).attr('id'); // mengambil id dari button hapus
-    $('#hps_id_kelurahan').val(id_kelurahan); // menampilkan id ke dalam form input id_kelurahan
 });
 </script>
 <?= $this->endSection('datatables'); ?>
